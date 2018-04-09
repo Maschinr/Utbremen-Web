@@ -1,8 +1,45 @@
+<!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8"/>
     <title>Hallo Welt</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="css/jquery.fullpage.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="js/jquery.fullpage.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+    <script>
+      $(document).ready(function() {
+        $('#fullpage').fullpage();
+      });
+
+      $('.carousel').carousel()
+    </script>
   </head>
+
   <body>
-    <p>Das ist ein Test</p>
+    <div id="fullpage">
+    	<div class="section" id="pixelart">
+        <div id="Pixelart-Carousel" class="carousel slide" data-ride="carousel" data-pause="false">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="images/pixelart/Hyper_Light_Drifter.png" height="1080" width="1920" alt="Hyper Light Drifter">
+            </div>
+            <div class="carousel-item">
+              <img src="images/pixelart/Stardew_Valley.jpg" height="1080" width="1920" alt="Stardew Valley">
+            </div>
+            <div class="carousel-item">
+              <img src="images/pixelart/celeste.png" alt="Celeste">
+            </div>
+          </div>
+        </div>
+      </div>
+    	<div class="section">Some section</div>
+    	<div class="section">Some section</div>
+    	<div class="section">Some section</div>
+    </div>
   </body>
 </html>
