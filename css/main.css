@@ -1,0 +1,23 @@
+#Hyper_Light_Drifter {
+  background-image: url("../images/pixelart/Hyper_Light_Drifter.png");
+}
+
+#Stardew_Valley {
+  background-image: url("../images/pixelart/Stardew_Valley.jpg");
+}
+
+#Celeste {
+  background-image: url("../images/pixelart/Celeste.png");
+}
+
+div.carousel-item-fullimage {
+  background-position: center;
+  width: 100%;
+  height: 100%;
+  filter: brightness(50%);
+}
+
+.carousel-inner {
+  width: 100%;
+  height: 100%;
+}
