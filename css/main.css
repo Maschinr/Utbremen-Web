@@ -1,12 +1,12 @@
-#Hyper_Light_Drifter {
+#hyper_light_drifter {
   background-image: url("../images/pixelart/Hyper_Light_Drifter.png");
 }
 
-#Stardew_Valley {
+#stardew_valley {
   background-image: url("../images/pixelart/Stardew_Valley.jpg");
 }
 
-#Celeste {
+#celeste {
   background-image: url("../images/pixelart/Celeste.png");
 }
 
@@ -17,7 +17,39 @@ div.carousel-item-fullimage {
   filter: brightness(50%);
 }
 
-.carousel-inner {
+div.carousel-inner {
   width: 100%;
   height: 100%;
+}
+
+#pixelart-carousel {
+  position: relative;
+}
+
+.middle-card-header {
+  position: relative;
+  text-align: center;
+}
+
+#landing {
+  background-image: url("../images/pixelart/Celeste.png");
+  background-position: center;
+}
+
+.middle-card {
+  border-radius: 7px;
+  width: 50%;
+  height: 50%;
+  position: absolute;
+  left: 25%;
+  top: 25%;
+  z-index: 500;
+}
+
+#landing-card {
+  background-color: rgba(105,88,95,1);
+}
+
+#pixelart-card {
+  background-color: rgba(255,255,255, 0.9);
 }
