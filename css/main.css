@@ -30,7 +30,7 @@
   background-image: url("../images/flat/Dumb_Ways_To_Die.png");
 }
 
-#pixelart-game {
+.game-canvas {
     background-color: black;
     height: calc(100% - 56px - 4px);
     padding-left: 0;
