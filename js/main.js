@@ -1,5 +1,16 @@
-$(document).ready(function () {
-    $('#fullpage').fullpage();
+$(document).ready(function() {
+  $("#fullpage").fullpage({
+    onLeave: function(index, nextIndex, direction) {
+      console.log("onLeave--" + "index: " + index + " nextIndex: " + nextIndex + " direction: " +  direction);
+      if(nextIndex === 2) {
+        gamestart("#pixelart-game");
+      } else if(nextIndex === 3) {
+        gamestart("#hand-drawn-game");
+      } else if (nextIndex === 4) {
+        gamestart("#flat-game");
+      }
+    }
+  });
 });
 
 $(document).keydown(function (e) {
@@ -10,5 +21,3 @@ $(document).keydown(function (e) {
         $(".carousel-control-next").click();
     }
 });
-
-

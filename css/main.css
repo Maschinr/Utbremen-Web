@@ -30,6 +30,15 @@
   background-image: url("../images/flat/Dumb_Ways_To_Die.png");
 }
 
+.game-canvas {
+    background-color: black;
+    height: calc(100% - 56px - 4px);
+    padding-left: 0;
+    padding-right: 0;
+    margin: auto;
+    display: block;
+}
+
 #loco_roco {
   background-image: url("../images/flat/Loco_Roco.png");
 }
@@ -62,6 +71,7 @@ div.carousel-inner {
   height: 50%;
   position: absolute;
   left: 25%;
+  overflow: hidden;
   top: 25%;
   z-index: 500;
 }
