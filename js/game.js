@@ -7,7 +7,7 @@ var tileheight;
 var cursnack;
 var anchor;
 var updatetimeout;
-var headimg, snackimg, bodyimg;
+var headimg, snackimg, bodyimg, tailimg;
 
 function doneResizing(){
     jcanvas.width(jcanvas.height());
@@ -18,6 +18,7 @@ function doneResizing(){
 function body() {
     this.x = 0;
     this.y = 0;
+    this.direction = 0;
 }
 
 function collide(a, b) {
@@ -61,9 +62,9 @@ function snake() {
         this.newdirection = 0;
 
         for(var i = this.bodyparts.length - 1; i !== 0; i--) {
-
             this.bodyparts[i].y = this.bodyparts[i - 1].y;
             this.bodyparts[i].x = this.bodyparts[i - 1].x;
+            this.bodyparts[i].direction = this.bodyparts[i - 1].direction;
         }
         if(this.direction === "up") {
             this.y -= tileheight;
@@ -76,14 +77,52 @@ function snake() {
         } 
     }
     this.draw = function() {
+
+        var rotation = 0;
+        var widthmod = 1;
+        var heightmod = 1;
+
         for(var i = 0; i < this.bodyparts.length; i++) {
-            //context.fillStyle = "#FFFFFF";
-            //context.fillRect(this.bodyparts[i].x, this.bodyparts[i].y, tilewidth, tileheight);
-            if(i === 0) {
-                context.drawImage(headimg, this.bodyparts[i].x, this.bodyparts[i].y, tilewidth, tileheight);
-            } else {
-                context.drawImage(bodyimg, this.bodyparts[i].x, this.bodyparts[i].y, tilewidth, tileheight);
-            }    
+           
+            rotation = 0;
+            widthmod = 1;
+            heightmod = 1;
+
+            if(i === 0 || i === this.bodyparts.length - 1) { // HEAD OR TAIL
+                context.save();
+
+                if(this.bodyparts[i].direction === "right") {
+                    context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y)
+                    rotation = 90;
+                    widthmod = 0.5;
+                    heightmod = 2;
+                } else if(this.bodyparts[i].direction === "left") {
+                    context.translate(this.bodyparts[i].x, this.bodyparts[i].y + tileheight)                
+                    rotation = -90;
+                    widthmod = 0.5;
+                    heightmod = 2;
+                } else if(this.bodyparts[i].direction === "down") {
+                    context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y + tileheight)                
+                    rotation = 180;
+                } else {
+                    context.translate(this.bodyparts[i].x, this.bodyparts[i].y)
+                }
+
+                context.rotate(rotation * (Math.PI / 180));
+
+                console.log("rotation" + rotation * (Math.PI / 180));
+
+                if(i === 0) { 
+                    context.drawImage(headimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
+                } else {
+                    context.drawImage(tailimg, 0, 0, tilewidth * widthmod, tileheight * heightmod);
+                }
+
+                context.restore();
+
+            } else { // BODY
+                context.drawImage(bodyimg, this.bodyparts[i].x, this.bodyparts[i].y, tilewidth, tileheight);        
+            }
         }
     }
 }
@@ -137,8 +176,6 @@ function update() {
 
     //Drawing
     if(cursnack) {
-        //context.fillStyle = "#FF0000";
-        //context.fillRect(cursnack.x, cursnack.y, tilewidth, tileheight);
         context.drawImage(snackimg, cursnack.x, cursnack.y, tilewidth, tileheight);
     }
     anchor.draw();
@@ -164,19 +201,23 @@ function gamestart(canvasname) {
 
     headimg = new Image();
     bodyimg = new Image();
+    tailimg = new Image();
     snackimg = new Image();
 
     if(canvasname === "#pixelart-game") {
         headimg.src = "images/pixelart/head.png";
         bodyimg.src = "images/pixelart/body.png";
+        tailimg.src = "images/pixelart/tail.png";
         snackimg.src = "images/pixelart/snack.png";
     } else if(canvasname === "#hand-drawn-game") {
         headimg.src = "images/hand-drawn/head.png";
         bodyimg.src = "images/hand-drawn/body.png";
+        tailimg.src = "images/hand-drawn/tail.png";
         snackimg.src = "images/hand-drawn/snack.png";
     } else if(canvasname === "#flat-game") {
         headimg.src = "images/flat/head.png";
         bodyimg.src = "images/flat/body.png";
+        tailimg.src = "images/flat/tail.png";
         snackimg.src = "images/flat/snack.png";
     }
 
