@@ -54,10 +54,6 @@ div.carousel-inner {
   height: 100%;
 }
 
-#pixelart-carousel {
-  position: relative;
-}
-
 .middle-card-header {
   position: relative;
   text-align: center;
@@ -69,7 +65,8 @@ div.carousel-inner {
 }
 
 .middle-card {
-  border-radius: 7px;
+  border-radius: 1px;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.3);
   width: 50%;
   height: 50%;
   position: absolute;
@@ -78,6 +75,21 @@ div.carousel-inner {
   top: 25%;
   z-index: 500;
 }
+
+.carousel-caption {
+    position: absolute;
+    width: 65%;
+    height: 20%;
+    overflow: auto;
+    white-space: normal;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.carousel-caption p {
+    padding-right: 20px;
+}
+
 
 #landing-card {
   background-color: rgba(105,88,95,1);
