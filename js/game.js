@@ -7,7 +7,7 @@ var tileheight;
 var cursnack;
 var anchor;
 var updatetimeout;
-var headimg, snackimg, bodyimg, tailimg;
+var headimg, snackimg, bodyimg, tailimg, bodycurveimg;
 
 function doneResizing(){
     jcanvas.width(jcanvas.height());
@@ -18,7 +18,8 @@ function doneResizing(){
 function body() {
     this.x = 0;
     this.y = 0;
-    this.direction = 0;
+    this.prevdirection = 0;
+    this.nextdirection = 0;
 }
 
 function collide(a, b) {
@@ -64,7 +65,27 @@ function snake() {
         for(var i = this.bodyparts.length - 1; i !== 0; i--) {
             this.bodyparts[i].y = this.bodyparts[i - 1].y;
             this.bodyparts[i].x = this.bodyparts[i - 1].x;
-            this.bodyparts[i].direction = this.bodyparts[i - 1].direction;
+            if(i != 0 || this.bodyparts.length - 1) {
+                if(this.bodyparts[i - 1].y > this.bodyparts[i].y) { //NEXT IS OVER
+                    this.bodyparts[i].nextdirection = "up";
+                } else if(this.bodyparts[i - 1].y < this.bodyparts[i].y){ //NEXT IS UNDER
+                    this.bodyparts[i].nextdirection = "down";
+                } else if(this.bodyparts[i - 1].x > this.bodyparts[i].x){ //NEXT IS RIGHT
+                    this.bodyparts[i].nextdirection = "right";
+                } else { //NEXT IS LEFT
+                    this.bodyparts[i].nextdirection = "left";
+                }
+
+                if(this.bodyparts[i + 1].y > this.bodyparts[i].y) { //PREV IS OVER
+                    this.bodyparts[i].prevdirection = "up";
+                } else if(this.bodyparts[i + 1].y < this.bodyparts[i].y){ //PREV IS UNDER
+                    this.bodyparts[i].prevdirection = "down";
+                } else if(this.bodyparts[i + 1].x > this.bodyparts[i].x){ //PREV IS RIGHT
+                    this.bodyparts[i].prevdirection = "right";
+                } else { //PREV IS LEFT
+                    this.bodyparts[i].prevdirection = "left";
+                }
+            }
         }
         if(this.direction === "up") {
             this.y -= tileheight;
@@ -92,12 +113,12 @@ function snake() {
                 context.save();
 
                 if(this.bodyparts[i].direction === "right") {
-                    context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y)
+                    context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y);
                     rotation = 90;
                     widthmod = 0.5;
                     heightmod = 2;
                 } else if(this.bodyparts[i].direction === "left") {
-                    context.translate(this.bodyparts[i].x, this.bodyparts[i].y + tileheight)                
+                    context.translate(this.bodyparts[i].x, this.bodyparts[i].y + tileheight);             
                     rotation = -90;
                     widthmod = 0.5;
                     heightmod = 2;
@@ -105,12 +126,10 @@ function snake() {
                     context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y + tileheight)                
                     rotation = 180;
                 } else {
-                    context.translate(this.bodyparts[i].x, this.bodyparts[i].y)
+                    context.translate(this.bodyparts[i].x, this.bodyparts[i].y);
                 }
 
                 context.rotate(rotation * (Math.PI / 180));
-
-                console.log("rotation" + rotation * (Math.PI / 180));
 
                 if(i === 0) { 
                     context.drawImage(headimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
@@ -121,7 +140,46 @@ function snake() {
                 context.restore();
 
             } else { // BODY
-                context.drawImage(bodyimg, this.bodyparts[i].x, this.bodyparts[i].y, tilewidth, tileheight);        
+                context.save();
+                if((this.bodyparts[i].nextdirection === "right" && this.bodyparts[i].prevdirection === "left") || (this.bodyparts[i].nextdirection === "left" && this.bodyparts[i].prevdirection === "right")) { //SIDEWAYS
+                    context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y);
+                    rotation = 90;
+                    widthmod = 0.5;
+                    heightmod = 2;
+
+                    context.rotate(rotation * (Math.PI / 180));
+                    context.drawImage(bodyimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
+                } else if((this.bodyparts[i].nextdirection === "top" && this.bodyparts[i].prevdirection === "down") || (this.bodyparts[i].nextdirection === "down" && this.bodyparts[i].prevdirection === "top")) { // VERTICAL WAYS
+                    context.translate(this.bodyparts[i].x, this.bodyparts[i].y) ;               
+                    context.drawImage(bodyimg, 0, 0, tilewidth * widthmod, tileheight * heightmod);
+                } else if((this.bodyparts[i].nextdirection === "top" && this.bodyparts[i].prevdirection === "right") || (this.bodyparts[i].nextdirection === "right" && this.bodyparts[i].prevdirection === "top")) { // TOP TO RIGHT
+                    context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y + tileheight);
+                    rotation = 180;
+
+                    context.rotate(rotation * (Math.PI / 180));
+                    context.drawImage(bodycurveimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
+                } else if((this.bodyparts[i].nextdirection === "top" && this.bodyparts[i].prevdirection === "left") || (this.bodyparts[i].nextdirection === "left" && this.bodyparts[i].prevdirection === "top")) { // TOP TO LEFT
+                    context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y);
+                    rotation = 90;
+                    widthmod = 0.5;
+                    heightmod = 2;
+
+                    context.rotate(rotation * (Math.PI / 180));
+                    context.drawImage(bodycurveimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
+                } else if((this.bodyparts[i].nextdirection === "down" && this.bodyparts[i].prevdirection === "left") || (this.bodyparts[i].nextdirection === "left" && this.bodyparts[i].prevdirection === "down")) { // DOWN TO LEFT
+                    context.translate(this.bodyparts[i].x, this.bodyparts[i].y);
+                    context.drawImage(bodycurveimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
+                } else if((this.bodyparts[i].nextdirection === "down" && this.bodyparts[i].prevdirection === "right") || (this.bodyparts[i].nextdirection === "right" && this.bodyparts[i].prevdirection === "down")) { // DOWN TO RIGHT
+                    context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y + tileheight);
+                    rotation = -90;
+                    widthmod = 0.5;
+                    heightmod = 2;
+
+                    context.rotate(rotation * (Math.PI / 180));
+                    context.drawImage(bodycurveimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
+                }
+  
+                context.restore();    
             }
         }
     }
@@ -202,22 +260,26 @@ function gamestart(canvasname) {
     headimg = new Image();
     bodyimg = new Image();
     tailimg = new Image();
+    bodycurveimg = new Image();
     snackimg = new Image();
 
     if(canvasname === "#pixelart-game") {
         headimg.src = "images/pixelart/head.png";
         bodyimg.src = "images/pixelart/body.png";
         tailimg.src = "images/pixelart/tail.png";
+        bodycurveimg.src = "images/pixelart/bodycurve.png";
         snackimg.src = "images/pixelart/snack.png";
     } else if(canvasname === "#hand-drawn-game") {
         headimg.src = "images/hand-drawn/head.png";
         bodyimg.src = "images/hand-drawn/body.png";
         tailimg.src = "images/hand-drawn/tail.png";
+        bodycurveimg.src = "images/hand-drawn/bodycurve.png";
         snackimg.src = "images/hand-drawn/snack.png";
     } else if(canvasname === "#flat-game") {
         headimg.src = "images/flat/head.png";
         bodyimg.src = "images/flat/body.png";
         tailimg.src = "images/flat/tail.png";
+        bodycurveimg.src = "images/flat/bodycurve.png";
         snackimg.src = "images/flat/snack.png";
     }
 
