@@ -19,7 +19,7 @@ function body() {
     this.x = 0;
     this.y = 0;
     this.prevdirection = 0;
-    this.nextdirection = 0;
+    this.direction = 0;
 }
 
 function collide(a, b) {
@@ -65,25 +65,24 @@ function snake() {
         for(var i = this.bodyparts.length - 1; i !== 0; i--) {
             this.bodyparts[i].y = this.bodyparts[i - 1].y;
             this.bodyparts[i].x = this.bodyparts[i - 1].x;
-            if(i != 0 || this.bodyparts.length - 1) {
-                if(this.bodyparts[i - 1].y > this.bodyparts[i].y) { //NEXT IS OVER
-                    this.bodyparts[i].nextdirection = "up";
-                } else if(this.bodyparts[i - 1].y < this.bodyparts[i].y){ //NEXT IS UNDER
-                    this.bodyparts[i].nextdirection = "down";
-                } else if(this.bodyparts[i - 1].x > this.bodyparts[i].x){ //NEXT IS RIGHT
-                    this.bodyparts[i].nextdirection = "right";
-                } else { //NEXT IS LEFT
-                    this.bodyparts[i].nextdirection = "left";
-                }
+            if(i !== 0) {
+                this.bodyparts[i].direction = this.bodyparts[i - 1].direction;
 
-                if(this.bodyparts[i + 1].y > this.bodyparts[i].y) { //PREV IS OVER
-                    this.bodyparts[i].prevdirection = "up";
-                } else if(this.bodyparts[i + 1].y < this.bodyparts[i].y){ //PREV IS UNDER
-                    this.bodyparts[i].prevdirection = "down";
-                } else if(this.bodyparts[i + 1].x > this.bodyparts[i].x){ //PREV IS RIGHT
-                    this.bodyparts[i].prevdirection = "right";
-                } else { //PREV IS LEFT
-                    this.bodyparts[i].prevdirection = "left";
+                if(i !== this.bodyparts.length - 1) { 
+                    console.log("next" + this.bodyparts[i].direction);
+                    if(this.bodyparts[i + 1].y < this.bodyparts[i].y) { //PREV IS OVER
+                        this.bodyparts[i].prevdirection = "up";
+                        console.log("prevup");
+                    } else if(this.bodyparts[i + 1].y > this.bodyparts[i].y){ //PREV IS UNDER
+                        this.bodyparts[i].prevdirection = "down";
+                        console.log("prevdown");
+                    } else if(this.bodyparts[i + 1].x > this.bodyparts[i].x){ //PREV IS RIGHT
+                        this.bodyparts[i].prevdirection = "right";
+                        console.log("prevright");
+                    } else { //PREV IS LEFT
+                        this.bodyparts[i].prevdirection = "left";
+                        console.log("prevleft");
+                    }
                 }
             }
         }
@@ -141,7 +140,7 @@ function snake() {
 
             } else { // BODY
                 context.save();
-                if((this.bodyparts[i].nextdirection === "right" && this.bodyparts[i].prevdirection === "left") || (this.bodyparts[i].nextdirection === "left" && this.bodyparts[i].prevdirection === "right")) { //SIDEWAYS
+                if((this.bodyparts[i].direction === "right" && this.bodyparts[i].prevdirection === "left") || (this.bodyparts[i].direction === "left" && this.bodyparts[i].prevdirection === "right")) { //SIDEWAYS
                     context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y);
                     rotation = 90;
                     widthmod = 0.5;
@@ -149,16 +148,16 @@ function snake() {
 
                     context.rotate(rotation * (Math.PI / 180));
                     context.drawImage(bodyimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
-                } else if((this.bodyparts[i].nextdirection === "top" && this.bodyparts[i].prevdirection === "down") || (this.bodyparts[i].nextdirection === "down" && this.bodyparts[i].prevdirection === "top")) { // VERTICAL WAYS
+                } else if((this.bodyparts[i].direction === "up" && this.bodyparts[i].prevdirection === "down") || (this.bodyparts[i].direction === "down" && this.bodyparts[i].prevdirection === "up")) { // VERTICAL WAYS
                     context.translate(this.bodyparts[i].x, this.bodyparts[i].y) ;               
                     context.drawImage(bodyimg, 0, 0, tilewidth * widthmod, tileheight * heightmod);
-                } else if((this.bodyparts[i].nextdirection === "top" && this.bodyparts[i].prevdirection === "right") || (this.bodyparts[i].nextdirection === "right" && this.bodyparts[i].prevdirection === "top")) { // TOP TO RIGHT
+                } else if((this.bodyparts[i].direction === "up" && this.bodyparts[i].prevdirection === "right") || (this.bodyparts[i].direction === "right" && this.bodyparts[i].prevdirection === "up")) { // TOP TO RIGHT
                     context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y + tileheight);
                     rotation = 180;
 
                     context.rotate(rotation * (Math.PI / 180));
                     context.drawImage(bodycurveimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
-                } else if((this.bodyparts[i].nextdirection === "top" && this.bodyparts[i].prevdirection === "left") || (this.bodyparts[i].nextdirection === "left" && this.bodyparts[i].prevdirection === "top")) { // TOP TO LEFT
+                } else if((this.bodyparts[i].direction === "up" && this.bodyparts[i].prevdirection === "left") || (this.bodyparts[i].direction === "left" && this.bodyparts[i].prevdirection === "up")) { // TOP TO LEFT
                     context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y);
                     rotation = 90;
                     widthmod = 0.5;
@@ -166,15 +165,15 @@ function snake() {
 
                     context.rotate(rotation * (Math.PI / 180));
                     context.drawImage(bodycurveimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
-                } else if((this.bodyparts[i].nextdirection === "down" && this.bodyparts[i].prevdirection === "left") || (this.bodyparts[i].nextdirection === "left" && this.bodyparts[i].prevdirection === "down")) { // DOWN TO LEFT
+                } else if((this.bodyparts[i].direction === "down" && this.bodyparts[i].prevdirection === "left") || (this.bodyparts[i].direction === "left" && this.bodyparts[i].prevdirection === "down")) { // DOWN TO LEFT
                     context.translate(this.bodyparts[i].x, this.bodyparts[i].y);
                     context.drawImage(bodycurveimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
-                } else if((this.bodyparts[i].nextdirection === "down" && this.bodyparts[i].prevdirection === "right") || (this.bodyparts[i].nextdirection === "right" && this.bodyparts[i].prevdirection === "down")) { // DOWN TO RIGHT
-                    context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y + tileheight);
+                } else if((this.bodyparts[i].direction === "down" && this.bodyparts[i].prevdirection === "right") || (this.bodyparts[i].direction === "right" && this.bodyparts[i].prevdirection === "down")) { // DOWN TO RIGHT
+                    context.translate(this.bodyparts[i].x, this.bodyparts[i].y + tileheight);
                     rotation = -90;
                     widthmod = 0.5;
                     heightmod = 2;
-
+                    console.log("rightdown");
                     context.rotate(rotation * (Math.PI / 180));
                     context.drawImage(bodycurveimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
                 }
