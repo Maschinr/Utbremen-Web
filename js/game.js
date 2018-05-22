@@ -7,6 +7,7 @@ var tileheight;
 var cursnack;
 var anchor;
 var updatetimeout;
+var headimg, snackimg, bodyimg;
 
 function doneResizing(){
     jcanvas.width(jcanvas.height());
@@ -42,7 +43,7 @@ function snack() {
             }
         }
     }
-    
+    //Still created inside Snake sometimes
     console.log("new snack: " + this.x + " " + this.y);
 }
 
@@ -77,8 +78,14 @@ function snake() {
 
     this.draw = function() {
         for(var i = 0; i < this.bodyparts.length; i++) {
-            context.fillStyle = "#FFFFFF";
-            context.fillRect(this.bodyparts[i].x, this.bodyparts[i].y, tilewidth, tileheight);
+            //context.fillStyle = "#FFFFFF";
+            //context.fillRect(this.bodyparts[i].x, this.bodyparts[i].y, tilewidth, tileheight);
+            if(i === 0) {
+                context.drawImage(headimg, this.bodyparts[i].x, this.bodyparts[i].y, tilewidth, tileheight);
+            } else {
+                context.drawImage(bodyimg, this.bodyparts[i].x, this.bodyparts[i].y, tilewidth, tileheight);
+            }
+            
         }
     }
 }
@@ -132,8 +139,9 @@ function update() {
 
     //Drawing
     if(cursnack) {
-        context.fillStyle = "#FF0000";
-        context.fillRect(cursnack.x, cursnack.y, tilewidth, tileheight);
+        //context.fillStyle = "#FF0000";
+        //context.fillRect(cursnack.x, cursnack.y, tilewidth, tileheight);
+        context.drawImage(snackimg, this.bodyparts[i].x, this.bodyparts[i].y, tilewidth, tileheight);
     }
     anchor.draw();
 
@@ -155,7 +163,26 @@ function gamestart(canvasname) {
     doneResizing(); //Set width and height
     anchor = new snake();
     cursnack = new snack();
-    update(); // Start update loop
+
+    headimg = new Image();
+    bodyimg = new Image();
+    snackimg = new Image();
+
+    if(canvasname === "#pixelart-game") {
+        headimg.src = "images/pixelart/head.png";
+        bodyimg.src = "images/pixelart/body.png";
+        snackimg.src = "images/pixelart/snack.png";
+    } else if(canvasname === "#hand-drawn-game") {
+        headimg.src = "images/hand-drawn/head.png";
+        bodyimg.src = "images/hand-drawn/body.png";
+        snackimg.src = "images/hand-drawn/snack.png";
+    } else if(canvasname === "#flat-game") {
+        headimg.src = "images/flat/head.png";
+        bodyimg.src = "images/flat/body.png";
+        snackimg.src = "images/flat/snack.png";
+    }
+
+    snackimg.addEventListener("load", update()); // Start update loop
 }
 
 $(window).resize(function() {
