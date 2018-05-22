@@ -1,33 +1,46 @@
 #hyper_light_drifter {
   background-image: url("../images/pixelart/Hyper_Light_Drifter.png");
+  background-size: cover;
 }
 
 #stardew_valley {
   background-image: url("../images/pixelart/Stardew_Valley.png");
+  background-size: cover;
 }
 
 #celeste {
   background-image: url("../images/pixelart/Celeste.png");
+  background-size: cover;
 }
 
 #dont_starve {
   background-image: url("../images/hand-drawn/Dont_Starve.png");
+  background-size: cover;
 }
 
 #ori_and_the_blind_forest {
   background-image: url("../images/hand-drawn/Ori_And_The_Blind_Forest.png");
+  background-size: cover;
 }
 
 #rayman {
   background-image: url("../images/hand-drawn/Rayman.png");
+  background-size: cover;
 }
 
 #a_night_in_the_woods {
   background-image: url("../images/flat/A_Night_In_The_Woods.png");
+  background-size: cover;
 }
 
 #dumb_ways_to_die {
   background-image: url("../images/flat/Dumb_Ways_To_Die.png");
+  background-size: cover;
+}
+
+#loco_roco {
+  background-image: url("../images/flat/Loco_Roco.png");
+  background-size: cover;
 }
 
 .game-canvas {
@@ -39,9 +52,7 @@
     display: block;
 }
 
-#loco_roco {
-  background-image: url("../images/flat/Loco_Roco.png");
-}
+
 
 div.carousel-item-fullimage {
   background-position: center;
@@ -62,6 +73,7 @@ div.carousel-inner {
 #landing {
   background-image: url("../images/pixelart/Celeste.png");
   background-position: center;
+  background-size: cover;
 }
 
 .middle-card {

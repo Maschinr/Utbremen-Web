@@ -75,7 +75,6 @@ function snake() {
             this.x += tilewidth;
         } 
     }
-
     this.draw = function() {
         for(var i = 0; i < this.bodyparts.length; i++) {
             //context.fillStyle = "#FFFFFF";
@@ -84,8 +83,7 @@ function snake() {
                 context.drawImage(headimg, this.bodyparts[i].x, this.bodyparts[i].y, tilewidth, tileheight);
             } else {
                 context.drawImage(bodyimg, this.bodyparts[i].x, this.bodyparts[i].y, tilewidth, tileheight);
-            }
-            
+            }    
         }
     }
 }
@@ -141,7 +139,7 @@ function update() {
     if(cursnack) {
         //context.fillStyle = "#FF0000";
         //context.fillRect(cursnack.x, cursnack.y, tilewidth, tileheight);
-        context.drawImage(snackimg, this.bodyparts[i].x, this.bodyparts[i].y, tilewidth, tileheight);
+        context.drawImage(snackimg, cursnack.x, cursnack.y, tilewidth, tileheight);
     }
     anchor.draw();
 
