@@ -1,18 +1,22 @@
-var jcanvas = $("#pixelart-game");
-var canvas = jcanvas[0];
-var context = canvas.getContext("2d");
+var jcanvas;
+var canvas;
+var context;
 var resizeId;
 var tilewidth;
 var tileheight;
 var cursnack;
 var anchor;
 var updatetimeout;
+var fieldsize;
+var curcanvasname;
 var headimg, snackimg, bodyimg, tailimg, bodycurveimg;
 
-function doneResizing(){
+function resize() {
     jcanvas.width(jcanvas.height());
-    tilewidth = canvas.width / 30;
-    tileheight = canvas.height / 30;
+    canvas.width = jcanvas.width();
+    canvas.height = jcanvas.width();
+    tilewidth = canvas.width / fieldsize;
+    tileheight = canvas.height / fieldsize;
 }
 
 function body() {
@@ -34,8 +38,8 @@ function snack() {
     var created = false;
 
     while(created === false) {
-        this.x = tilewidth * Math.floor(Math.random() * 29);
-        this.y = tileheight * Math.floor(Math.random() * 29);
+        this.x = Math.floor(Math.random() * fieldsize);
+        this.y = Math.floor(Math.random() * fieldsize);
         for(var i = 0; i < anchor.bodyparts.length; i++) {
             if (collide(this, anchor.bodyparts[i])) {
                 created = false;
@@ -46,13 +50,12 @@ function snack() {
         }
     }
     //Still created inside Snake sometimes
-    console.log("new snack: " + this.x + " " + this.y);
 }
 
 function snake() {
     this.bodyparts = [this];
-    this.x = canvas.width / 2;
-    this.y = canvas.height / 2;
+    this.x = fieldsize / 2;
+    this.y = fieldsize / 2;
     this.direction = 0;
     this.newdirection = 0;
 
@@ -68,72 +71,59 @@ function snake() {
             if(i !== 0) {
                 this.bodyparts[i].direction = this.bodyparts[i - 1].direction;
 
-                if(i !== this.bodyparts.length - 1) { 
-                    console.log("next" + this.bodyparts[i].direction);
+                if(i !== this.bodyparts.length - 1) {
                     if(this.bodyparts[i + 1].y < this.bodyparts[i].y) { //PREV IS OVER
                         this.bodyparts[i].prevdirection = "up";
-                        console.log("prevup");
                     } else if(this.bodyparts[i + 1].y > this.bodyparts[i].y){ //PREV IS UNDER
                         this.bodyparts[i].prevdirection = "down";
-                        console.log("prevdown");
                     } else if(this.bodyparts[i + 1].x > this.bodyparts[i].x){ //PREV IS RIGHT
                         this.bodyparts[i].prevdirection = "right";
-                        console.log("prevright");
                     } else { //PREV IS LEFT
                         this.bodyparts[i].prevdirection = "left";
-                        console.log("prevleft");
                     }
                 }
             }
         }
         if(this.direction === "up") {
-            this.y -= tileheight;
+            this.y--;
         } else if(this.direction === "left") {
-            this.x -= tilewidth;
+            this.x--;
         } else if(this.direction === "down") {
-            this.y += tileheight;
+            this.y++;
         } else if(this.direction === "right") {
-            this.x += tilewidth;
+            this.x++;
         } 
     }
     this.draw = function() {
 
         var rotation = 0;
-        var widthmod = 1;
-        var heightmod = 1;
 
         for(var i = 0; i < this.bodyparts.length; i++) {
            
             rotation = 0;
-            widthmod = 1;
-            heightmod = 1;
 
             if(i === 0 || i === this.bodyparts.length - 1) { // HEAD OR TAIL
                 context.save();
 
                 if(this.bodyparts[i].direction === "right") {
-                    context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y);
+                    context.translate(this.bodyparts[i].x * tilewidth + tilewidth, this.bodyparts[i].y * tileheight);
                     rotation = 90;
-                    widthmod = 0.5;
-                    heightmod = 2;
                 } else if(this.bodyparts[i].direction === "left") {
-                    context.translate(this.bodyparts[i].x, this.bodyparts[i].y + tileheight);             
+                    context.translate(this.bodyparts[i].x * tilewidth, this.bodyparts[i].y * tileheight + tileheight);             
                     rotation = -90;
-                    widthmod = 0.5;
-                    heightmod = 2;
                 } else if(this.bodyparts[i].direction === "down") {
-                    context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y + tileheight)                
+                    context.translate(this.bodyparts[i].x * tilewidth + tilewidth, this.bodyparts[i].y * tileheight + tileheight)                
                     rotation = 180;
                 } else {
-                    context.translate(this.bodyparts[i].x, this.bodyparts[i].y);
+                    context.translate(this.bodyparts[i].x * tilewidth, this.bodyparts[i].y * tileheight);
                 }
 
                 context.rotate(rotation * (Math.PI / 180));
 
                 if(i === 0) { 
-                    context.drawImage(headimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
+                    context.drawImage(headimg, 0, 0, tilewidth, tileheight); 
                 } else {
-                    context.drawImage(tailimg, 0, 0, tilewidth * widthmod, tileheight * heightmod);
+                    context.drawImage(tailimg, 0, 0, tilewidth, tileheight);
                 }
 
                 context.restore();
@@ -141,41 +131,34 @@ function snake() {
             } else { // BODY
                 context.save();
                 if((this.bodyparts[i].direction === "right" && this.bodyparts[i].prevdirection === "left") || (this.bodyparts[i].direction === "left" && this.bodyparts[i].prevdirection === "right")) { //SIDEWAYS
-                    context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y);
+                    context.translate(this.bodyparts[i].x * tilewidth + tilewidth, this.bodyparts[i].y * tileheight);
                     rotation = 90;
-                    widthmod = 0.5;
-                    heightmod = 2;
 
                     context.rotate(rotation * (Math.PI / 180));
-                    context.drawImage(bodyimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
+                    context.drawImage(bodyimg, 0, 0, tilewidth, tileheight); 
                 } else if((this.bodyparts[i].direction === "up" && this.bodyparts[i].prevdirection === "down") || (this.bodyparts[i].direction === "down" && this.bodyparts[i].prevdirection === "up")) { // VERTICAL WAYS
-                    context.translate(this.bodyparts[i].x, this.bodyparts[i].y) ;               
-                    context.drawImage(bodyimg, 0, 0, tilewidth * widthmod, tileheight * heightmod);
+                    context.translate(this.bodyparts[i].x * tilewidth, this.bodyparts[i].y * tileheight) ;               
+                    context.drawImage(bodyimg, 0, 0, tilewidth, tileheight);
                 } else if((this.bodyparts[i].direction === "up" && this.bodyparts[i].prevdirection === "right") || (this.bodyparts[i].direction === "right" && this.bodyparts[i].prevdirection === "up")) { // TOP TO RIGHT
-                    context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y + tileheight);
+                    context.translate(this.bodyparts[i].x * tilewidth + tilewidth, this.bodyparts[i].y * tileheight + tileheight);
                     rotation = 180;
 
                     context.rotate(rotation * (Math.PI / 180));
-                    context.drawImage(bodycurveimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
+                    context.drawImage(bodycurveimg, 0, 0, tilewidth, tileheight); 
                 } else if((this.bodyparts[i].direction === "up" && this.bodyparts[i].prevdirection === "left") || (this.bodyparts[i].direction === "left" && this.bodyparts[i].prevdirection === "up")) { // TOP TO LEFT
-                    context.translate(this.bodyparts[i].x + tilewidth, this.bodyparts[i].y);
+                    context.translate(this.bodyparts[i].x * tilewidth + tilewidth, this.bodyparts[i].y * tileheight);
                     rotation = 90;
-                    widthmod = 0.5;
-                    heightmod = 2;
 
                     context.rotate(rotation * (Math.PI / 180));
-                    context.drawImage(bodycurveimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
+                    context.drawImage(bodycurveimg, 0, 0, tilewidth, tileheight); 
                 } else if((this.bodyparts[i].direction === "down" && this.bodyparts[i].prevdirection === "left") || (this.bodyparts[i].direction === "left" && this.bodyparts[i].prevdirection === "down")) { // DOWN TO LEFT
-                    context.translate(this.bodyparts[i].x, this.bodyparts[i].y);
-                    context.drawImage(bodycurveimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
+                    context.translate(this.bodyparts[i].x * tilewidth, this.bodyparts[i].y * tileheight);
+                    context.drawImage(bodycurveimg, 0, 0, tilewidth, tileheight); 
                 } else if((this.bodyparts[i].direction === "down" && this.bodyparts[i].prevdirection === "right") || (this.bodyparts[i].direction === "right" && this.bodyparts[i].prevdirection === "down")) { // DOWN TO RIGHT
-                    context.translate(this.bodyparts[i].x, this.bodyparts[i].y + tileheight);
+                    context.translate(this.bodyparts[i].x * tilewidth, this.bodyparts[i].y * tileheight + tileheight);
                     rotation = -90;
-                    widthmod = 0.5;
-                    heightmod = 2;
-                    console.log("rightdown");
                     context.rotate(rotation * (Math.PI / 180));
-                    context.drawImage(bodycurveimg, 0, 0, tilewidth * widthmod, tileheight * heightmod); 
+                    context.drawImage(bodycurveimg, 0, 0, tilewidth, tileheight); 
                 }
   
                 context.restore();    
@@ -227,13 +210,13 @@ function update() {
         }
     }
 
-    if(anchor.x > tilewidth * 29 || anchor.x < 0 || anchor.y > tileheight * 29 || anchor.y < 0) {
+    if(anchor.x >= fieldsize || anchor.x < 0 || anchor.y >= fieldsize || anchor.y < 0) {
         gameover();
     }
 
     //Drawing
     if(cursnack) {
-        context.drawImage(snackimg, cursnack.x, cursnack.y, tilewidth, tileheight);
+        context.drawImage(snackimg, cursnack.x * tilewidth, cursnack.y * tileheight, tilewidth, tileheight);
     }
     anchor.draw();
 
@@ -247,12 +230,14 @@ function gameover() {
 }
 
 function gamestart(canvasname) {
+    console.log("gamestart");
+    curcanvasname = canvasname;
+    fieldsize = 20;
     clearTimeout(updatetimeout);
     jcanvas = $(canvasname);
     canvas = jcanvas[0];
     context = canvas.getContext("2d");
     window.addEventListener("keydown", move, false); // Start input hook
-    doneResizing(); //Set width and height
     anchor = new snake();
     cursnack = new snack();
 
@@ -263,7 +248,7 @@ function gamestart(canvasname) {
     snackimg = new Image();
 
     if(canvasname === "#pixelart-game") {
-        headimg.src = "images/pixelart/head.png";
+        headimg.src = "images/pixelart/head.png"; //Hier einfach zu svg ändern falls nötig
         bodyimg.src = "images/pixelart/body.png";
         tailimg.src = "images/pixelart/tail.png";
         bodycurveimg.src = "images/pixelart/bodycurve.png";
@@ -282,10 +267,11 @@ function gamestart(canvasname) {
         snackimg.src = "images/flat/snack.png";
     }
 
+    resize();
     snackimg.addEventListener("load", update()); // Start update loop
 }
 
-$(window).resize(function() {
+$(window).resize(function() { //wait for resize to finish
     clearTimeout(resizeId);
-    resizeId = setTimeout(doneResizing, 500);
+    resizeId = setTimeout(resize, 500);
 });
