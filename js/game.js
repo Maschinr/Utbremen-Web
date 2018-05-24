@@ -43,13 +43,12 @@ function snack() {
         for(var i = 0; i < anchor.bodyparts.length; i++) {
             if (collide(this, anchor.bodyparts[i])) {
                 created = false;
+                break;
             } else {
                 created = true;
-                break;
             }
         }
     }
-    //Still created inside Snake sometimes
 }
 
 function snake() {
@@ -94,6 +93,7 @@ function snake() {
             this.x++;
         } 
     }
+
     this.draw = function() {
 
         var rotation = 0;
@@ -230,7 +230,6 @@ function gameover() {
 }
 
 function gamestart(canvasname) {
-    console.log("gamestart");
     curcanvasname = canvasname;
     fieldsize = 20;
     clearTimeout(updatetimeout);

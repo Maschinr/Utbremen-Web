@@ -44,7 +44,7 @@
 }
 
 .game-canvas {
-    background-color: black;
+    background-color: rgb(182, 182, 182);
     height: calc(100% - 56px - 4px);
     padding-left: 0;
     padding-right: 0;
