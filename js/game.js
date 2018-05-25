@@ -19,6 +19,7 @@ function resize() {
     canvas.height = jcanvas.width();
     tilewidth = canvas.width / fieldsize;
     tileheight = canvas.height / fieldsize;
+    context.font = "10pt roboto";
 }
 
 function body() {
@@ -263,23 +264,21 @@ function gamestart(canvasname) {
     tailimg = new Image();
     bodycurveimg = new Image();
     snackimg = new Image();
+    resize();
 
     if(canvasname === "#pixelart-game") {
-        context.font = "15px Press Start 2P"
         headimg.src = "images/pixelart/head.png"; //Hier einfach zu svg ändern falls nötig
         bodyimg.src = "images/pixelart/body.png";
         tailimg.src = "images/pixelart/tail.png";
         bodycurveimg.src = "images/pixelart/bodycurve.png";
         snackimg.src = "images/pixelart/snack.png";
     } else if(canvasname === "#hand-drawn-game") {
-        context.font = "15px Indie Flower"
         headimg.src = "images/hand-drawn/head.png";
         bodyimg.src = "images/hand-drawn/body.png";
         tailimg.src = "images/hand-drawn/tail.png";
         bodycurveimg.src = "images/hand-drawn/bodycurve.png";
         snackimg.src = "images/hand-drawn/snack.png";
     } else if(canvasname === "#flat-game") {
-        context.font = "15px Roboto"
         headimg.src = "images/flat/head.svg";
         bodyimg.src = "images/flat/body.svg";
         tailimg.src = "images/flat/tail.svg";
@@ -287,7 +286,7 @@ function gamestart(canvasname) {
         snackimg.src = "images/flat/snack.svg";
     }
 
-    resize();
+
     snackimg.addEventListener("load", update()); // Start update loop
 }
 
