@@ -8,18 +8,27 @@
     <link rel="stylesheet" type="text/css" href="css/jquery.fullpage.min.css" />
     <link rel="stylesheet" type="text/css" href="css/main.css" />
     <link rel="stylesheet" type="text/css" href="css/simple-scrollbar.css" />
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
 </head>
 
 <body>
     <div id="fullpage">
         <div class="section" id="landing">
-            <div class="middle-card" id="landing-card">
+            <div class="middle-card">
+                <h1 class="middle-card-header">Startseite</h1>
+                <p class="justify">Willkommen auf unserer Webseite! Auf den nachfolgenden Seiten finden Sie einige Informationen zu verschiedenen
+                    Grafikstilen, die in Videospielen zum Einsatz kommen. Es handelt sich dabei natürlich nur um eine Auswahl
+                    an Grafikstilen und längst nicht allen. Allerdings haben Sie die Möglichkeit den Spieleklassiker "Snake"
+                    in den hier vorgestellten Grafikstilen direkt zu testen. Die Steuerung sollte vertraut sein: W (oben),
+                    A (links), D (rechts) und S (unten) steuern die Schlange durch das Spielfeld.</p>
             </div>
         </div>
         <div class="section" id="pixelart">
-            <div class="middle-card" id="pixelart-card">
-                <h1 class="middle-card-header">PIXELART</h1>
+            <div class="middle-card">
+                <h1 class="middle-card-header" id="pixelart-header">PIXELART</h1>
                 <canvas class="game-canvas" id="pixelart-game"></canvas>
             </div>
             <div id="pixelart-carousel" class="carousel slide" data-ride="carousel" data-interval="false">
@@ -84,8 +93,8 @@
             </div>
         </div>
         <div class="section" id="hand-drawn">
-            <div class="middle-card" id="hand-drawn-card">
-                <h1 class="middle-card-header">HAND-DRAWN</h1>
+            <div class="middle-card">
+                <h1 class="middle-card-header" id="hand-drawn-header">HAND-DRAWN</h1>
                 <canvas class="game-canvas" id="hand-drawn-game"></canvas>
             </div>
             <div id="hand-drawn-carousel" class="carousel slide" data-ride="carousel" data-interval="false">
@@ -154,8 +163,8 @@
             </div>
         </div>
         <div class="section" id="flat">
-            <div class="middle-card" id="flat-card">
-                <h1 class="middle-card-header">FLAT</h1>
+            <div class="middle-card">
+                <h1 class="middle-card-header" id="flat-art-header">FLAT</h1>
                 <canvas class="game-canvas" id="flat-game"></canvas>
             </div>
             <div id="flat-carousel" class="carousel slide" data-ride="carousel" data-interval="false">
