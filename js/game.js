@@ -9,6 +9,7 @@ var anchor;
 var updatetimeout;
 var fieldsize;
 var curcanvasname;
+var gameruns;
 var score;
 var headimg, snackimg, bodyimg, tailimg, bodycurveimg;
 
@@ -169,6 +170,12 @@ function snake() {
 }
 
 function move(e) {
+    if(gameruns === false) {
+        anchor = new snake();
+        cursnack = new snack();
+        gameruns = true;
+        update();
+    }
     if(e.keyCode === 87) { // W
         if(anchor.direction != "down") {
             anchor.newdirection = "up";
@@ -211,9 +218,7 @@ function update() {
         }
     }
 
-    if(anchor.x >= fieldsize || anchor.x < 0 || anchor.y >= fieldsize || anchor.y < 0) {
-        gameover();
-    }
+    
 
     //Drawing
     if(cursnack) {
@@ -224,19 +229,27 @@ function update() {
     var tmp_txt = "Score: " + (anchor.bodyparts.length - 1);
     context.fillText(tmp_txt, (canvas.width / 2) - (context.measureText(tmp_txt).width / 2), 10);
 
-    updatetimeout = setTimeout(update, 100);
+    if(anchor.x >= fieldsize || anchor.x < 0 || anchor.y >= fieldsize || anchor.y < 0) {
+        gameover();
+    } else {
+        updatetimeout = setTimeout(update, 100);
+    }
+    
 }
 
 function gameover() {
-    alert("You Lost!");
-    anchor = new snake();
-    cursnack = new snack();
+    gameruns = false;
+    var tmp_txt = "Game Over";
+    context.fillText(tmp_txt, (canvas.width / 2) - (context.measureText(tmp_txt).width / 2), canvas.height / 2);
+    tmp_txt = "Press any Key";
+    context.fillText(tmp_txt, (canvas.width / 2) - (context.measureText(tmp_txt).width / 2), (canvas.height / 2) + 20);
 }
 
 function gamestart(canvasname) {
     curcanvasname = canvasname;
     fieldsize = 20;
     score = 0;
+    gameruns = true;
     clearTimeout(updatetimeout);
     jcanvas = $(canvasname);
     canvas = jcanvas[0];
@@ -252,21 +265,21 @@ function gamestart(canvasname) {
     snackimg = new Image();
 
     if(canvasname === "#pixelart-game") {
-        context.font = "10px Press Start 2P"
+        context.font = "15px Press Start 2P"
         headimg.src = "images/pixelart/head.png"; //Hier einfach zu svg ändern falls nötig
         bodyimg.src = "images/pixelart/body.png";
         tailimg.src = "images/pixelart/tail.png";
         bodycurveimg.src = "images/pixelart/bodycurve.png";
         snackimg.src = "images/pixelart/snack.png";
     } else if(canvasname === "#hand-drawn-game") {
-        context.font = "10px Indie Flower"
+        context.font = "15px Indie Flower"
         headimg.src = "images/hand-drawn/head.png";
         bodyimg.src = "images/hand-drawn/body.png";
         tailimg.src = "images/hand-drawn/tail.png";
         bodycurveimg.src = "images/hand-drawn/bodycurve.png";
         snackimg.src = "images/hand-drawn/snack.png";
     } else if(canvasname === "#flat-game") {
-        context.font = "10px Roboto"
+        context.font = "15px Roboto"
         headimg.src = "images/flat/head.svg";
         bodyimg.src = "images/flat/body.svg";
         tailimg.src = "images/flat/tail.svg";
