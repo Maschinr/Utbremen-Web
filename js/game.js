@@ -259,11 +259,11 @@ function gamestart(canvasname) {
         bodycurveimg.src = "images/hand-drawn/bodycurve.png";
         snackimg.src = "images/hand-drawn/snack.png";
     } else if(canvasname === "#flat-game") {
-        headimg.src = "images/flat/head.png";
-        bodyimg.src = "images/flat/body.png";
-        tailimg.src = "images/flat/tail.png";
-        bodycurveimg.src = "images/flat/bodycurve.png";
-        snackimg.src = "images/flat/snack.png";
+        headimg.src = "images/flat/head.svg";
+        bodyimg.src = "images/flat/body.svg";
+        tailimg.src = "images/flat/tail.svg";
+        bodycurveimg.src = "images/flat/bodycurve.svg";
+        snackimg.src = "images/flat/snack.svg";
     }
 
     resize();
