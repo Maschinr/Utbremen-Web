@@ -44,7 +44,7 @@
 }
 
 .game-canvas {
-    background-color: rgb(182, 182, 182);
+    background-color: white;
     height: calc(100% - 56px - 4px);
     padding-left: 0;
     padding-right: 0;
@@ -86,6 +86,7 @@ div.carousel-inner {
   overflow: hidden;
   top: 25%;
   z-index: 500;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .carousel-caption {
@@ -102,19 +103,22 @@ div.carousel-inner {
     padding-right: 20px;
 }
 
-
-#landing-card {
-  background-color: rgba(105,88,95,1);
+.justify { 
+    text-align: justify; 
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5%;
+    font-size: 18pt;
 }
 
-#pixelart-card {
-  background-color: rgba(255,255,255, 0.5);
+#hand-drawn-header {
+    font-family: 'Indie Flower', cursive;
 }
 
-#hand-drawn-card {
-  background-color: rgba(255,255,255, 0.5);
+#pixelart-header {
+    font-family: 'Press Start 2P', cursive;
 }
 
-#flat-card {
-  background-color: rgba(255,255,255, 0.5);
+#flat-art-header {
+    font-family: 'Roboto', sans-serif;
 }
